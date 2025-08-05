@@ -1,0 +1,158 @@
+/* General container */
+#experiment-content {
+    max-width: 900px;
+    margin: 40px auto 40px auto;
+    padding: 32px 24px;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 24px rgba(44,62,80,0.08);
+    font-family: 'Segoe UI', 'Roboto', Arial, sans-serif;
+    color: #23272e;
+    font-size: 1.08rem;
+    line-height: 1.7;
+}
+
+/* Headings */
+#experiment-content h1,
+#experiment-content h2,
+#experiment-content h3,
+#experiment-content h4,
+#experiment-content h5,
+#experiment-content h6 {
+    font-family: 'Roboto', 'Segoe UI', Arial, sans-serif;
+    font-weight: 700;
+    color: #1a237e;
+    margin-top: 2em;
+    margin-bottom: 0.6em;
+    line-height: 1.2;
+}
+#experiment-content h1 { font-size: 2.2em; border-bottom: 2px solid #e0e0e0; padding-bottom: 0.3em; }
+#experiment-content h2 { font-size: 1.7em; border-bottom: 1px solid #e0e0e0; padding-bottom: 0.2em; }
+#experiment-content h3 { font-size: 1.3em; }
+#experiment-content h4 { font-size: 1.1em; }
+#experiment-content h5 { font-size: 1em; }
+#experiment-content h6 { font-size: 0.95em; }
+
+/* Paragraphs */
+#experiment-content p {
+    margin: 1em 0;
+}
+
+/* Lists */
+#experiment-content ul,
+#experiment-content ol {
+    margin: 1em 0 1em 2em;
+    padding-left: 1.2em;
+}
+#experiment-content li {
+    margin-bottom: 0.4em;
+}
+
+/* Blockquotes */
+#experiment-content blockquote {
+    border-left: 4px solid #ffd54f;
+    background: #fffde7;
+    color: #616161;
+    margin: 1.5em 0;
+    padding: 0.8em 1.2em;
+    border-radius: 6px;
+    font-style: italic;
+}
+
+/* Code blocks */
+#experiment-content pre {
+    background: #23272e;
+    color: #fff;
+    border-radius: 8px;
+    padding: 16px;
+    overflow-x: auto;
+    font-size: 1em;
+    margin: 1.5em 0;
+    font-family: 'Fira Mono', 'Consolas', 'Menlo', monospace;
+}
+#experiment-content code {
+    background: #f6e7c1;
+    color: #c7254e;
+    border-radius: 4px;
+    padding: 2px 6px;
+    font-size: 0.98em;
+    font-family: 'Fira Mono', 'Consolas', 'Menlo', monospace;
+}
+
+/* Tables */
+#experiment-content table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 1.5em 0;
+    background: #fafafa;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(44,62,80,0.04);
+}
+#experiment-content th,
+#experiment-content td {
+    border: 1px solid #e0e0e0;
+    padding: 10px 14px;
+    text-align: left;
+}
+#experiment-content th {
+    background: #ffe082;
+    color: #23272e;
+    font-weight: 600;
+}
+#experiment-content tr:nth-child(even) {
+    background: #fffde7;
+}
+
+/* Images */
+#experiment-content img {
+    max-width: 100%;
+    border-radius: 8px;
+    margin: 1em 0;
+    box-shadow: 0 2px 8px rgba(44,62,80,0.08);
+}
+
+/* Links */
+#experiment-content a {
+    color: #1976d2;
+    text-decoration: underline;
+    transition: color 0.2s;
+}
+#experiment-content a:hover {
+    color: #d4af37;
+    text-decoration: underline;
+}
+
+/* Horizontal rule */
+#experiment-content hr {
+    border: none;
+    border-top: 2px solid #ffe082;
+    margin: 2em 0;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+    #experiment-content {
+        padding: 12px 4vw;
+        font-size: 1em;
+    }
+    #experiment-content table, #experiment-content pre {
+        font-size: 0.95em;
+    }
+}
+
+/* For experiment navigation links in markdown viewer */
+.experiment-nav a {
+  text-decoration: none !important;
+  color: #007bff !important;
+}
+
+.experiment-nav a:hover {
+  text-decoration: none !important;
+  color: #007bff !important;
+}
+
+.experiment-nav a .arrow-black {
+  color: #000 !important;
+  text-decoration: none !important;
+}

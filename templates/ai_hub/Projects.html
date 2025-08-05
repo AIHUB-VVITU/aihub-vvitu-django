@@ -1,0 +1,43 @@
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% include 'ai_hub/partials/links.html' %}
+    <link rel="stylesheet" href="{% static 'styling/ai_hub/project.css' %}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css"/>
+    <title>AI-HUB-About</title>
+    <style>
+      #cards > .card {
+        margin-bottom : 1rem;
+      }
+    </style>
+</head>
+<body>
+    {% include 'ai_hub/partials/header.html' %}
+    <br><br>
+    <h1 id="page-title">Ongoing Projects</h1>
+    <hr><br><center>'&nbsp;Coming Soon&nbsp;'</center><br><br>
+    <h1 id="page-title">Completed Projects</h1>
+    <hr>
+     <div id="cards">
+        <div class="card">
+            <div id="card-image">
+             <a href="projects/games"> <img src="{% static 'images/ai_hub/game.jpg' %}" alt="..."></a>
+            </div>  
+        </div>
+         <div class="card" id='ml'>
+            <div id="card-image">
+              <img src="{% static 'images/ai_hub/ml1.png' %}" alt="...">
+            </div>  
+        </div>
+        <div class="card" id='dl'>
+          <div id="card-image">
+            <img src="{% static 'images/ai_hub/dl1.png' %}" alt="...">
+          </div>  
+        </div>
+        {% include 'ai_hub/partials/footer.html' %}
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    </body>
+    </html>

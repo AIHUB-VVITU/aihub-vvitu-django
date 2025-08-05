@@ -1,0 +1,69 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% include "ai_hub/partials/links.html" %}
+    <title>{{pk|upper}}</title>
+</head>
+<body>
+    {% include "ai_hub/partials/header.html" %}
+    
+    <div class="container my-5">
+        <br><br>
+        <h1 class='text-center mb-2'>{{pk|upper}} Resources</h1>
+        <form action="" method="GET" class="mb-4">
+            <label for="category-select" class="form-label">Filter by Category:</label>
+            <select name='category' id="category-select" class="form-select" onchange="this.form.submit()">
+                <option value="" {% if not selected_category %}selected{% endif %}>All Categories</option>
+                {% for category in categories %}
+                    <option value="{{ category }}" {% if category == selected_category %}selected{% endif %}>{{ category|title }}</option>
+                {% endfor %}
+            </select>
+        </form>
+        <hr>
+        <div class="accordion">
+            {% for object in data %}
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                        {{object.category|title}}
+                    </button>
+                </h2>
+                <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
+                    <div class="accordion-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered table-hover">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th scope="col" style="width: 60%;">Topic</th>
+                                        <th scope="col" class="text-center">Video</th>
+                                        <th scope="col" class="text-center">Article</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for content in object.data.content %}
+                                    <tr class="align-middle">
+                                        <td><span>{{content.title}}</span></td>
+                                        <td class="text-center"><a href="{{content.video_link}}" class="btn btn-primary btn-sm" target='_blank'>Watch Video</a></td>
+                                        <td class="text-center"><a href="{{content.article_link}}" class="btn btn-info btn-sm" target='_blank'>Read Article</a></td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr>
+        {% endfor %}
+        </div>
+        {% if not data %}
+        <div class="alert alert-info mt-4" role="alert">
+            <h4 class="alert-heading">No Content Found</h4>
+            <p>There is no content available for this section or for the category you selected. Please try another filter.</p>
+        </div>
+        {% endif %}
+    </div>
+    {% include "ai_hub/partials/footer.html" %}
+</body>
+</html>

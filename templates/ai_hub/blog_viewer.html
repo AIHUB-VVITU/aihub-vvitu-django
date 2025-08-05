@@ -1,0 +1,54 @@
+{% load static %}
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% include 'ai_hub/partials/links.html' %}
+    <link rel="stylesheet" href="{% static 'styling/ai_hub/blog.css' %}">
+    
+    
+    <title>Blog Viewer</title>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/github.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+
+</head>
+<body>
+    {% include 'ai_hub/partials/header.html' %}
+    <br><br><br>
+    <h1 id="blog-title" class="ms-2">Blog Post</h1>
+    <div id="blog-content">Loading...</div>
+
+    <script>
+        async function loadMarkdown(blogPath) {
+            // Get the blog path from the URL
+
+            if (!blogPath) {
+                document.getElementById("blog-content").innerHTML = "<p>Error: No blog specified.</p>";
+                return;
+            }
+
+            try {
+                const response = await fetch(blogPath);  // Fetch the Markdown file
+                if (!response.ok) {
+                    throw new Error(`Error: ${response.status}`);
+                }
+
+                const markdownText = await response.text(); // Get the raw Markdown content
+                document.getElementById("blog-content").innerHTML = marked.parse(markdownText);
+                hljs.highlightAll();  // Apply syntax highlighting
+
+            } catch (error) {
+                document.getElementById("blog-content").innerHTML = `<p>Error loading blog: ${error.message}</p>`;
+            }
+        }
+
+        const blogPath = `/media/blogs/{{pk}}`
+        loadMarkdown(blogPath);
+    </script>
+    <br><br>
+    {% include 'ai_hub/partials/footer.html' %}
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+</body>
+</html>

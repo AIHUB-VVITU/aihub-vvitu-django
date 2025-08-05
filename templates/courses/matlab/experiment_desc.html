@@ -1,0 +1,34 @@
+{% load static %}
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% include 'courses/matlab/links.html' %}
+    <script>
+        MathJax = {
+        tex: {
+            inlineMath: [['$', '$'], ['\\(', '\\)']],
+            displayMath: [['$$', '$$'], ['\\[', '\\]']]
+        },
+        svg: {
+            fontCache: 'global'
+        }
+        };
+    </script>
+    <script type="text/javascript" id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+    <link rel="stylesheet" href="{% static 'styling/courses/matlab/md.css' %}">
+    <link rel="stylesheet" href="{% static 'styling/courses/matlab/home.css' %}">
+    <title>Experiment-{{ exp.id }}</title>
+</head>
+<body oncontextmenu="return false;">
+    {% comment %} {% include 'courses/matlab/header.html' %} {% endcomment %}
+    <br><br>
+    <a href="/courses/calculus-using-matlab#experiments" style="margin-left: 2rem;">List of Experiments</a> &gt <a href="">Experiment - {{ exp.id }}</a>
+    <div id="experiment-content" class="container my-4">
+        {{ blog_content_html|safe }}
+    </div>
+    {% comment %} {% include 'courses/matlab/footer.html' %} {% endcomment %}
+
+</body>
+</html>

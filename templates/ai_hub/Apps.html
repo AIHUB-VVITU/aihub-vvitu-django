@@ -1,0 +1,45 @@
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI-HUB-Projects</title>
+    {% include 'ai_hub/partials/links.html' %}
+    <link rel="stylesheet" href="{% static 'styling/ai_hub/Apps.css' %}">
+</head>
+<body>
+    {% include "ai_hub/partials/header.html" %}
+    <br><br>
+    <h1 id="page-title">Apps</h1>
+    <div id="cards">
+      {% for app in apps %}
+        <div class="app-card">
+            <div id="card-image">
+              <img src="{{app.img.url}}" alt="Project_image" class="card-img" >
+            </div>
+            <div class="card-body">
+              <div id="desc">
+                <h5 class="card-title">{{app.title}}</h5><br>
+                <h6 class="card-subtitle mb-2 text-body-secondary">Description</h6>
+                <div id="text-scroll">
+                  <p class="card-text">{{app.desc}}</p>
+                  {% if app.s_id %}
+                    <p ><h6>Done By</h6> {{app.name}}<br>Roll No : {{app.s_id}}</p>
+                  {% else %}
+                    <p ><h6>Done By</h6> {{app.name}}<br></p>
+                  {% endif %}
+                </div>
+                
+              </div>
+              <div id="buttons">
+                <a href="#" class="btn btn-primary">&nbsp;Run</a>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+        
+        </div>
+    {% include "ai_hub/partials/footer.html" %}
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+</body>
+</html>

@@ -1,0 +1,32 @@
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% include 'ai_hub/partials/links.html' %}
+    <link rel="stylesheet" href="{% static 'styling/ai_hub/meetups.css' %}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css"/>
+    <title>AI-HUB-Meetups</title>
+</head>
+<body>
+    {% include 'ai_hub/partials/header.html' %}
+    <br><br>
+    <h1 id="page-title">Interactions</h1>
+    <hr>
+    <div id="video-list">
+        {% for video in meetups %}
+        <div class="video-container">
+            <iframe width="560" height="315" src="{{video.vid_url}}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+            {% if video.desc %}
+                <p class="video-caption">{{video.desc}}</p>
+            {% else %}
+                <p class="video-caption"></p>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+    {% include 'ai_hub/partials/footer.html' %}
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+</body>
+</html>

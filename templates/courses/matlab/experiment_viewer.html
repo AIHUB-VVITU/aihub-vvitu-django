@@ -1,0 +1,276 @@
+{% load static %}
+
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Experiment Viewer - {{ exp.id }} </title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Fira+Mono&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+  <link rel="stylesheet" href="{% static 'styling/courses/matlab/exp-viewer.css' %}">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-matlab.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+  {% include "courses/matlab/links.html" %}
+  <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            },
+            svg: {
+                fontCache: 'global'
+            }
+        };
+  </script>
+</head>
+
+<body style="margin:0px;" oncontextmenu="return false;">
+    <div id="nav" class="top-breadcrumb sticky-top bg-light m-0 p-2" style="display: flex; justify-content: space-between; align-items: center;">
+      <div style="display: flex; align-items: center; gap: 0.7rem">
+          <a href="/courses/calculus-using-matlab/" style="text-decoration: none; color: #007bff;">Calculus <span class="arrow-black">&gt;</span></a><a href="/courses/calculus-using-matlab#experiments" style="text-decoration: none; color: #007bff;">List of Experiments <span class="arrow-black">&gt;</span></a>
+          <a href="#" id="experiment-title-link" style="text-decoration: none; color: #141414ff; font-size: 1.05em;" disabled >{{ exp.title }}</a>
+      </div>
+      <button id="draw-btn" onclick="display_draw()" class="btn btn-outline-secondary">Draw</button>
+  </div>
+  <div class="top-controls">
+    <div style="display: flex; width: 100%; flex-direction: row; align-items: center; gap: 10px; justify-content: center;">
+      <div id="slide-buttons" style="display: flex; flex-wrap: wrap; gap: 6px;" class='m-3'>
+        {% for count in slide_count %}
+            <button onclick="load_slide({{forloop.counter0}})" class="slide-btn btn btn-light">{{count}}</button>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+  <div id="exp-info" class="alert alert-warning mt-2">
+    <span class="badge text-bg-secondary bg-danger" id="exp-part"></span>
+    <span id="exp-topic"></span>
+  </div>
+  <div class="container-fluid exp-container">
+    <div class="row" style="height: 100%;">
+      <!-- Code Section (40%) -->
+      <div class="col-md-5 col-12 border-end p-3" style="flex: 0 0 40%; max-width: 40%;">
+        <h4>Experiment Code</h4>
+        <pre class="code-box"><code class="language-matlab" id="code-block" style="display: block;"></code></pre>
+      </div>
+      
+      <div class="p-3" style="max-width: 60%;">
+        <h4>Explanation</h4>
+        <div id="slides"></div>
+        <div id="output-section" style="margin-top:2rem; display:none;">
+          <h4>Output</h4>
+          <div id="output-block" class="code-box"
+            oncopy="return false"
+            oncontextmenu="return false"
+            tabindex="0"
+            aria-label="Output block. Copying is disabled;"> 
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="bottom-controls sticky-bottom bg-light p-2" style="">
+    <div style="display: flex; width: 100%; flex-direction: row; align-items: center; justify-content: space-between; gap: 10px;">
+      <div style="flex:1; display: flex; justify-content: flex-start;">
+        <button id="prev-slide" class="btn btn-outline-primary">&larr; Prev</button>
+      </div>
+      <div style="flex:1; display: flex; justify-content: center;">
+        <span id="slide-number" style="font-weight: bold; color: rgb(212, 175, 55);"></span>
+      </div>
+      <div style="flex:1; display: flex; justify-content: flex-end;">
+        <button id="next-slide" class="btn btn-outline-primary">Next &rarr;</button>
+      </div>
+    </div>      
+  </div>
+  <!-- Drawing Canvas Overlay -->
+  <canvas id="draw-canvas" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; z-index:2000; background:transparent;"></canvas>
+  <div id="draw-controls" style="display:none; position:fixed; top:100px; right:20px; z-index:2100;">
+    <div id="color-picker" style="display:inline-block; margin-right:12px;">
+        <button class="color-btn" data-color="#000000" style="background:#000; width:24px; height:24px; border-radius:50%; border:2px solid #ccc; margin-right:4px;"></button>
+        <button class="color-btn" data-color="#ff0000" style="background:#ff0000; width:24px; height:24px; border-radius:50%; border:2px solid #ccc; margin-right:4px;"></button>
+        <button class="color-btn" data-color="#008000" style="background:#008000; width:24px; height:24px; border-radius:50%; border:2px solid #ccc; margin-right:4px;"></button>
+        <button class="color-btn" data-color="#0000ff" style="background:#0000ff; width:24px; height:24px; border-radius:50%; border:2px solid #ccc; margin-right:4px;"></button>
+        <button class="color-btn" data-color="#ffa500" style="background:#ffa500; width:24px; height:24px; border-radius:50%; border:2px solid #ccc; margin-right:4px;"></button>
+        <button class="color-btn" data-color="#800080" style="background:#800080; width:24px; height:24px; border-radius:50%; border:2px solid #ccc;"></button>
+      </div>
+    <button id="save-btn" class="btn btn-outline-success btn-sm">Save</button>
+    <button id="clear-btn" class="btn btn-outline-danger btn-sm">Clear</button>
+    <button id="close-draw-btn" onclick='display_draw()' class="btn btn-outline-secondary btn-sm">Close</button>
+  </div>
+  <script>
+    const expData = {{ exp.exp_data|safe }};
+    const slideArea = document.getElementById('slides');
+    const codeBlock = document.getElementById('code-block');
+    const expTopic = document.getElementById('exp-topic');
+    const expPart = document.getElementById('exp-part');
+    const slideNum = document.getElementById('slide-number');
+    const outputBlock = document.getElementById('output-block');
+    const nextButton = document.getElementById('next-slide');
+    const prevButton = document.getElementById('prev-slide');
+    const slideButtons = document.getElementsByClassName('slide-btn');
+
+    let currentSlideIndex = 0;
+
+    async function load_slide(slide_num) {
+        if (slide_num < 0 || slide_num >= expData.slides.length) {
+            return;
+        }
+        currentSlideIndex = slide_num;
+        
+        for (const btn of slideButtons) {
+          btn.classList.add('btn-light');
+          btn.classList.remove('btn-secondary');
+        }
+        slideButtons[currentSlideIndex].classList.remove('btn-light');
+        slideButtons[currentSlideIndex].classList.add('btn-secondary');
+
+        const data = expData.slides[currentSlideIndex];
+        const explanation_content = `
+        <div class='slide active'>
+            <ul>${(data.explanation || []).map(item => `<li class='alert alert-info'>${item}</li>`).join("")}</ul>
+        </div>
+        `
+        slideArea.innerHTML = explanation_content;
+        codeBlock.textContent = data.code;
+        expTopic.innerHTML = data.topic;
+        if (data.part) {
+          expPart.innerHTML = `Part-` + data.part;
+        }
+        slideNum.innerHTML = `Step ${currentSlideIndex + 1} of ${expData.slides.length}`;
+
+        let content = ``;
+
+        if (data.output && data.output.trim() !== "") {
+          content += data.output.replace(/\n/g, "<br>");
+        } else {
+          content = ``;
+        }
+        if (data.output_img) {
+          const img_names = data.output_img.split(' ').filter(name => name && name !== 'plot-img');
+          for (const name of img_names) {
+            content += `<img src="/media/courses/matlab/exp_outputs/${name}" alt="${name}" class="img-fluid my-2">`
+          }
+        }
+
+        if (content != '') {
+          document.getElementById("output-section").style.display = "block";
+          outputBlock.innerHTML = content;
+          content = '';
+        } else {
+          document.getElementById("output-section").style.display = "none";
+          outputBlock.innerHTML = '';
+        }
+
+        if (window.Prism) Prism.highlightElement(codeBlock);
+
+        prevButton.disabled = currentSlideIndex === 0;
+        nextButton.disabled = currentSlideIndex >= expData.slides.length - 1;
+    }
+    load_slide(0);
+
+    async function display_draw() {
+        if (drawCanvas.style.display === 'block') {
+            drawCanvas.style.display = 'none';
+            drawControls.style.display = 'none';
+        } else {
+            resizeCanvas();
+            drawCanvas.style.display = 'block';
+            drawControls.style.display = 'block';
+            // Set a default color if none is active
+            if (!document.querySelector('.color-btn.active')) {
+                document.querySelector('.color-btn[data-color="#ff0000"]').click();
+            }
+        }
+    }
+
+    // --- Drawing Canvas Logic ---
+    const drawCanvas = document.getElementById('draw-canvas');
+    const drawControls = document.getElementById('draw-controls');
+    const ctx = drawCanvas.getContext('2d');
+
+    const clearBtn = document.getElementById('clear-btn');
+    const saveBtn = document.getElementById('save-btn');
+    const colorBtns = document.querySelectorAll('.color-btn');
+
+    let isDrawing = false;
+    let lastX = 0;
+    let lastY = 0;
+
+    function resizeCanvas() {
+        drawCanvas.width = window.innerWidth;
+        drawCanvas.height = window.innerHeight;
+        ctx.lineJoin = 'round';
+        ctx.lineCap = 'round';
+        ctx.lineWidth = 5;
+    }
+
+    function draw(e) {
+        if (!isDrawing) return;
+        ctx.beginPath();
+        ctx.moveTo(lastX, lastY);
+        ctx.lineTo(e.offsetX, e.offsetY);
+        ctx.stroke();
+        [lastX, lastY] = [e.offsetX, e.offsetY];
+    }
+
+    drawCanvas.addEventListener('mousedown', (e) => {
+        isDrawing = true;
+        [lastX, lastY] = [e.offsetX, e.offsetY];
+    });
+    drawCanvas.addEventListener('mousemove', draw);
+    drawCanvas.addEventListener('mouseup', () => isDrawing = false);
+    drawCanvas.addEventListener('mouseout', () => isDrawing = false);
+
+    // --- Control Listeners ---
+    clearBtn.addEventListener('click', () => {
+        ctx.clearRect(0, 0, drawCanvas.width, drawCanvas.height);
+    });
+
+    saveBtn.addEventListener('click', () => {
+        // Temporarily hide canvas and controls for a clean screenshot
+        drawControls.style.display = 'none';
+        drawCanvas.style.display = 'none';
+
+        html2canvas(document.body, { logging: false, useCORS: true }).then(pageCanvas => {
+            const finalCtx = pageCanvas.getContext('2d');
+            finalCtx.drawImage(drawCanvas, 0, 0); // Draw annotations on top
+            const link = document.createElement('a');
+            link.download = 'aihub-drawing.png';
+            link.href = pageCanvas.toDataURL('image/png');
+            link.click();
+            drawControls.style.display = 'block';
+            drawCanvas.style.display = 'block';
+        });
+    });
+
+    colorBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            ctx.strokeStyle = btn.dataset.color;
+            document.querySelector('.color-btn.active')?.classList.remove('active');
+            btn.classList.add('active');
+        });
+    });
+
+    prevButton.addEventListener('click', () => {
+        load_slide(currentSlideIndex - 1);
+    });
+
+    nextButton.addEventListener('click', () => {
+        load_slide(currentSlideIndex + 1);
+    }); 
+
+    window.addEventListener('keydown', (e) => {
+        if (drawCanvas.style.display === 'block') {
+            return;
+        }
+        if (e.key === 'ArrowRight') {
+            nextButton.click();
+        } else if (e.key === 'ArrowLeft') {
+            prevButton.click();
+        }
+    });
+
+  </script>
+</body>
+</html>

@@ -1,0 +1,77 @@
+{% load static %}
+
+<style>
+    @media (min-width: 992px) {
+        .navbar .dropdown:hover .dropdown-menu {
+            display: block;
+        }
+    }
+
+    @media (max-width: 991px) {
+        .navbar .dropdown-menu {
+            position: static;
+            display: none;
+        }
+
+        .navbar .dropdown-menu.show {
+            display: block;
+        }
+    }
+
+    .dropdown-submenu {
+        position: relative;
+    }
+    
+    .dropdown-submenu .submenu {
+        top: 0;
+        left: 100%;
+        margin-top: -1px;
+        display: none;
+        position: absolute;
+    }
+    
+    .submenu-arrow {
+        float: right;
+        margin-top: 4px;
+    }
+    
+    @media (min-width: 992px) {
+        .dropdown-submenu:hover .submenu {
+            display: block;
+        }
+    }
+    
+    @media (max-width: 991px) {
+        .dropdown-submenu .submenu {
+            position: static;
+            margin-left: 15px;
+            margin-right: 15px;
+            margin-top: 0;
+            left: 0;
+            display: none;
+        }
+        
+        .dropdown-submenu .dropdown-item {
+            padding-left: 20px;
+        }
+    }
+</style>
+
+<nav class="navbar navbar-expand-lg bg-body-tertiary fixed-top">
+    <div class="container-fluid" style="display: flex; flex-direction: row-reverse">
+        <div style="display: flex; align-items: center">
+            {% comment %} <img src="{% static 'images/AI-HUB.jpg' %}" alt="AI-HUB@VVIT" width="35px" style="border-radius: 60%;"> {% endcomment %}
+            <a class="navbar-brand" href="/">AI-HUB | MATLAB</a>
+        </div>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" aria-current="page" href='/courses/calculus-using-matlab'> &larr; BACK </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>

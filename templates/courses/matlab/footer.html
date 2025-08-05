@@ -1,0 +1,197 @@
+{% load static %}
+<div class="bg-circle-container">
+            <div class="wheel-container">
+                <img src="{%static 'images/ai_hub/VVIT.png' %}" alt="Outer Wheel" class="outer">
+                <img src="{%static 'images/ai_hub/wheel_center.png' %}" alt="Center" class="center">
+            </div>
+        </div>
+        <nav class="navbar navbar-expand-lg fixed-bottom bg-body-tertiary">
+            <div class="container-fluid" id="footer">
+                <ul style="list-style: none; display: flex; justify-content: center;">
+                    <div><li class="desc_item"><i class="fa-solid fa-building-columns"></i><a href="https://www.vvitguntur.com/">VVIT</a></li></div>
+                    <div><li class="desc_item"><i class="fa-solid fa-location-dot"></i><a href="https://www.google.com/maps/place/Vasireddy+Venkatadri+Institute+of+Technology/data=!4m2!3m1!1s0x0:0x8c86e4f36490336b?sa=X&ved=1t:2428&ictx=111">Guntur</a></li></div>
+                    <div><li class="desc_item"><i class="fas fa-envelope"></i><a href="mailto:">Mail</a></li></div>
+                    <div><li class="desc_item"><i class="fa-brands fa-github"></i><a href="https://github.com/AIHUB-VVIT">Github</a></li></div>
+                </ul>
+            </div>
+        </nav>
+        <style>
+            body {
+                position: relative;
+                z-index: 1;
+            }
+
+            .desc_item {
+                margin: 0 0.7rem 0 0;
+                display: flex;
+                align-items: center;
+                position: relative;
+                z-index: 10;
+            }
+            
+            .desc_item i {
+                margin-right: 0px;
+            }
+            
+            .desc_item a {
+                text-decoration: none;
+                color: inherit;
+                transition: color 0.3s ease;
+            }
+            
+            .desc_item a:hover {
+                color: rgb(214, 219, 228);
+            }
+            
+            #footer {
+                justify-content: center;
+                padding-top: 12.5px;
+                position: relative;
+                z-index: 10;
+                {% comment %} background-color: rgba(248, 249, 250, 0.85); {% endcomment %}
+                backdrop-filter: blur(5px);
+                -webkit-backdrop-filter: blur(5px);
+            }
+            
+            .bg-circle-container {
+                position: fixed;
+                bottom: 0;
+                right: -35;
+                width: 100%;
+                height: 100%;
+                pointer-events: none;
+                z-index: -1;
+                background: transparent;
+                overflow: hidden;
+            }
+            
+            .wheel-container {
+                position: absolute;
+                bottom: 0;
+                right: 0;
+                width: 70vh;
+                height: 70vh;
+                background: transparent;
+                overflow: visible;
+                transform: translate(20%, 18.95%);
+            }
+            
+            .wheel-container img {
+                position: absolute;
+                background: transparent;
+            }
+            
+            .outer {
+                width: 100%;
+                height: 100%;
+                animation:rotate 60s linear infinite;
+                opacity: 0.2;
+            }
+            
+            .center {
+                width: 34.21%; /* Adjusted size to fit better within the outer wheel */
+                height: auto; /* Maintain aspect ratio */
+                top: 50%; /* Center vertically */
+                left: 49.7%; /* Center horizontally */
+                transform: translate(-50%, -50%); /* Offset to truly center */
+                z-index: 1;
+                opacity: 0.2;
+                object-fit: contain; /* Ensure the image scales proportionally */
+            }
+            
+            @keyframes rotate {
+                from {
+                    transform: rotate(0deg);
+                }
+                to {
+                    transform: rotate(360deg);
+                }
+            }
+            
+            .navbar.fixed-bottom:hover ~ .bg-circle-container .wheel-container {
+                opacity: 0.5;
+            }
+            
+            .card, .container, .project-card, .app-card, .blog-card, section, article, main, .row, .col {
+                position: relative !important;
+                z-index: 5 !important;
+            }
+            
+            @media (max-width: 768px) {
+            .desc_item {
+                margin: 0 0.3rem;
+                font-size: 0.7rem;
+            }
+    
+            .wheel-container {
+                width: 48vh; /* Keep the same size as desktop */
+                height: 48vh; /* Keep the same size as desktop */
+                bottom: 0;
+                right: 0;
+                transform: translate(20%, 15.5%); /* Keep the same transform as desktop */
+                position: fixed; /* Add fixed positioning to ensure consistent placement */
+            }
+            
+            #footer {
+                padding: 8px 0;
+            }
+            
+            @supports not (backdrop-filter: blur(5px)) {
+                #footer {
+                    background-color: rgba(248, 249, 250, 0.95);
+                }
+            }
+        </style>
+        </style>
+        
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                
+                const outerImage = new Image();
+                outerImage.onload = function() {
+                    console.log('Outer wheel image loaded successfully');
+                    document.querySelectorAll('.outer').forEach(img => {
+                        img.style.display = 'block';
+                        img.style.backgroundColor = 'transparent';
+                    });
+                };
+                outerImage.onerror = function() {
+                    console.error('Outer wheel image failed to load');
+                    document.querySelectorAll('.outer').forEach(img => {
+                        img.style.display = 'none';
+                    });
+                };
+                outerImage.src = `{%static 'images/ai_hub/wheel_center.png' %}`;
+                
+                const centerImage = new Image();
+                centerImage.onload = function() {
+                    console.log('Center image loaded successfully');
+                    document.querySelectorAll('.center').forEach(img => {
+                        img.style.display = 'block';
+                        img.style.backgroundColor = 'transparent';
+                    });
+                };
+                centerImage.onerror = function() {
+                    console.error('Center image failed to load');
+                    document.querySelectorAll('.center').forEach(img => {
+                        img.style.display = 'none';
+                    });
+                };
+                centerImage.src = `{%static 'images/ai_hub/wheel_center.png' %}`;
+                
+                // Remove any duplicate elements
+                setTimeout(() => {
+                    const containers = document.querySelectorAll('.bg-circle-container');
+                    if (containers.length > 1) {
+                        for (let i = 1; i < containers.length; i++) {
+                            containers[i].remove();
+                        }
+                    }
+                    
+                    // Ensure transparency
+                    document.querySelectorAll('.wheel-container, .wheel-container img').forEach(el => {
+                        el.style.backgroundColor = 'transparent';
+                    });
+                }, 300);
+            });
+        </script>
