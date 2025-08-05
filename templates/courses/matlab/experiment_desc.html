@@ -24,7 +24,7 @@
 <body oncontextmenu="return false;">
     {% comment %} {% include 'courses/matlab/header.html' %} {% endcomment %}
     <br><br>
-    <a href="/courses/calculus-using-matlab#experiments" style="margin-left: 2rem;">List of Experiments</a> &gt <a href="">Experiment - {{ exp.id }}</a>
+    <a href="/courses/calculus-using-matlab#experiments" style="margin-left: 2rem;">List of Experiments</a> &gt <a href="/courses/calculus-using-matlab/experiment_view?id={{exp.id}}">Experiment - {{ exp.id }}</a>
     <div id="experiment-content" class="container my-4">
         {{ blog_content_html|safe }}
     </div>

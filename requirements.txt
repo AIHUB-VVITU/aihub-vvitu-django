@@ -2,4 +2,4 @@ django
 gunicorn
 pathlib
 pillow
-json
+markdown2
