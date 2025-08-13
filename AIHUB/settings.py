@@ -24,11 +24,21 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-75lcu$b3-yghs9rh#%&r2s9a4-eorjgd-(a@y!2b#1xt_y-&i8'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'aihub-vvitu.social',
+    'www.aihub-vvitu.social',
+    'localhost',
+    '127.0.0.1'
+]
 
-
+CSRF_ALLOWED_ORIGINS = [
+   'aihub-vvitu.social',
+    'www.aihub-vvitu.social',
+    'localhost',
+    '127.0.0.1' 
+]
 # Application definition
 
 DJANGO_APPS = [
@@ -45,6 +55,7 @@ MAIN_APP = [
 ]
 LOCAL_APPS = [
     'apps.courses.matlab.apps.MatlabConfig', 
+    'apps.games.apps.GamesConfig',
 ]
 
 INSTALLED_APPS = DJANGO_APPS + MAIN_APP + LOCAL_APPS
@@ -113,6 +124,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
 
+
 LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'UTC'
@@ -127,8 +139,8 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
-STATICFILES_DIRS = [BASE_DIR / 'static']
-
+STATICFILES_DIRS = [os.path.join(BASE_DIR ,'static')]
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 

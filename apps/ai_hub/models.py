@@ -27,7 +27,7 @@ class Game(models.Model):
     desc = models.TextField(max_length=500, blank=True, null=True)
     img = models.ImageField(upload_to='game_images', blank=True, null=True)
     git_link = models.URLField(max_length=300, blank=True, null=True)
-    play_url = models.URLField(max_length=300, blank=True, null=True)
+    play_url = models.CharField(max_length=50, blank=True, null=True)
     
 class Event(models.Model):
     topic = models.CharField(max_length=100, blank=True, null=True)

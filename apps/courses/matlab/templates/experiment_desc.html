@@ -1,0 +1,39 @@
+{% load static %}
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% include 'links.html' %}
+    <script>
+        MathJax = {
+        tex: {
+            inlineMath: [['$', '$'], ['\\(', '\\)']],
+            displayMath: [['$$', '$$'], ['\\[', '\\]']]
+        },
+        svg: {
+            fontCache: 'global'
+        }
+        };
+    </script>
+    <script type="text/javascript" id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+    <link rel="stylesheet" href="{% static '/matlab/css/md.css' %}">
+    <link rel="stylesheet" href="{% static '/matlab/css/home.css' %}">
+    <title>Experiment-{{ exp.id }}</title>
+</head>
+<body oncontextmenu="return false;">
+    <header class="fixed-top bg-light">
+        {% include "header.html" %}
+        <div style="display: flex; align-items: center; gap: 0.7rem; font-size:12px;" class="p-2">
+            <a href="/courses/calculus-using-matlab#experiments" style="margin-left: 2rem;">List of Experiments</a> &gt 
+            <a href="/courses/calculus-using-matlab/experiment_view?id={{exp.id}}">Experiment - {{ exp.id }}</a>
+        </div>
+    </header>
+    <br><br><br><br>
+    <div id="experiment-content" class="container my-4">
+        {{ blog_content_html|safe }}
+    </div>
+    {% comment %} {% include 'courses/matlab/footer.html' %} {% endcomment %}
+
+</body>
+</html>
