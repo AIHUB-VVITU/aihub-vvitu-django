@@ -6,8 +6,16 @@
     {% include 'partials/links.html' %}
     <link rel="stylesheet" href="{% static 'css/meetups.css' %}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI-HUB-About</title>
+    <link rel="icon" href="{% static 'images/ai.png' %}" type="image/png">
     <title>AI-HUB - Events</title>
+        <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-ESPNK2NQ0R"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-ESPNK2NQ0R');
+    </script>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -57,8 +65,10 @@
     </style>
 </head>
 <body>
-    {% include "header.html" %}
-    <br><br>
+    <header class="fixed-top bg-light">
+        {% include "header.html" %}
+    </header>
+    <br>
     <h1 id="page-title">Upcoming Events</h1>
     {% if event_upcoming is None and hackathon_upcoming is None %}
         <center><p>No upcoming events. Stay tuned for more updates.</p></center>

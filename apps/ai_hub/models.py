@@ -28,7 +28,16 @@ class Game(models.Model):
     img = models.ImageField(upload_to='game_images', blank=True, null=True)
     git_link = models.URLField(max_length=300, blank=True, null=True)
     play_url = models.CharField(max_length=50, blank=True, null=True)
-    
+
+class Ml(models.Model):
+    title = models.CharField(max_length=30, blank=True, null=True)
+    name = models.CharField(max_length=30, blank=True, null=True)
+    s_id = models.CharField(max_length=15, blank=True, null=True)
+    desc = models.TextField(max_length=500, blank=True, null=True)
+    img = models.ImageField(upload_to='ml_images', blank=True, null=True)
+    git_link = models.URLField(max_length=300, blank=True, null=True)
+    play_url = models.CharField(max_length=50, blank=True, null=True)
+
 class Event(models.Model):
     topic = models.CharField(max_length=100, blank=True, null=True)
     speaker = models.CharField(max_length=30, blank=True, null=True)

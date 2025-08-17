@@ -1,0 +1,518 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="{% static 'images/ai.png' %}" type="image/png">
+    {% include 'partials/links.html' %}
+    <title>AIHUB-socialGPT</title>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-ESPNK2NQ0R"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-ESPNK2NQ0R');
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;900&display=swap');
+
+        body {
+            margin: 0;
+            overflow: hidden;
+            background-color: #000;
+            font-family: 'Orbitron', sans-serif !important;
+            color: white;
+        }
+
+        /* Canvas for the background digital rain */
+        #rainCanvas {
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 1;
+        }
+
+        /* Container for the text to center it */
+        .text-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding-top: 20vh; /* Increased from 8vh to 20vh to move content down */
+            z-index: 10;
+            pointer-events: none; /* Allows clicks to pass through */
+        }
+
+        /* The main text element container */
+        .scramble-text {
+            position: relative;
+            opacity: 0; /* Initially hidden */
+            transform: scale(1.1);
+            transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            max-width: 90vw; /* Added max-width for better mobile display */
+        }
+
+        /* Class to trigger the appearance */
+        .scramble-text.visible {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        /* Style for subtitle text below the main text */
+        .scramble-text .subtitle {
+            font-size: clamp(0.75rem, 4vw, 2rem);
+            font-weight: 400;
+            letter-spacing: 0.05em;
+            margin-top: 0.5em;
+        }
+        
+        .main-text-group {
+            display: flex;
+            align-items: baseline;
+            flex-wrap: wrap; /* Added for better mobile display */
+            justify-content: center;
+        }
+
+        .scramble-text .main {
+            font-size: clamp(2rem, 8vw, 8rem);
+            font-weight: 900;
+            letter-spacing: 0.1em;
+            color: rgb(56, 255, 112);
+            text-shadow: 
+                0 0 10px rgba(56, 255, 112, 0.8),
+                0 0 20px rgba(56, 255, 112, 0.6),
+                0 0 40px rgba(56, 255, 112, 0.4);
+            white-space: nowrap;
+        }
+
+        .scramble-text .highlight {
+            font-size: clamp(2rem, 8vw, 8rem);
+            font-weight: 900;
+            letter-spacing: 0.1em;
+            color: rgb(250, 115, 105);
+            text-shadow:
+                0 0 10px rgba(250, 115, 105, 0.9),
+                0 0 20px rgba(250, 115, 105, 0.7);
+        }
+
+        /* New style for the highlighted subtitle */
+        .scramble-text .subtitle-highlight {
+            font-size: clamp(0.75rem, 4vw, 2rem);
+            font-weight: 400;
+            color: rgb(250, 115, 105);
+            text-shadow: 0 0 10px rgba(250, 115, 105, 0.9);
+            letter-spacing: 0.05em;
+            margin-top: 0.5em;
+        }
+
+        /* Consolidated styles for the final slide */
+        .scramble-text .final-text {
+            font-size: clamp(1rem, 4vw, 3rem);
+            font-weight: 400;
+            color: rgb(56, 255, 112);
+            text-shadow: 0 0 8px rgba(56, 255, 112, 0.7);
+            letter-spacing: 0.05em;
+            line-height: 1.4;
+            margin: 0.2em 0; /* Added margin for better spacing */
+        }
+
+        .scramble-text .final-text.highlight {
+            color: rgb(250, 115, 105);
+            text-shadow: 0 0 10px rgba(250, 115, 105, 0.9);
+        }
+
+        /* Audio start prompt - Fixed positioning to avoid header overlap */
+        .audio-prompt {
+            position: fixed;
+            top: 80px; /* Changed from 20px to 80px to avoid header */
+            right: 20px;
+            background: rgba(56, 255, 112, 0.9);
+            color: #000;
+            padding: 10px 15px;
+            border-radius: 5px;
+            font-size: 14px;
+            font-weight: bold;
+            z-index: 1001; /* Increased z-index to be above header */
+            opacity: 0;
+            transform: translateX(100%);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            box-shadow: 0 0 20px rgba(56, 255, 112, 0.5);
+        }
+
+        .audio-prompt.show {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .audio-prompt:hover {
+            background: rgba(56, 255, 112, 1);
+            transform: translateX(0) scale(1.05);
+        }
+
+        /* Responsive adjustments for smaller screens */
+        @media (max-width: 768px) {
+            .text-container {
+                padding-top: 18vh; /* Increased from 6vh to 18vh for mobile */
+            }
+            
+            .scramble-text .main,
+            .scramble-text .highlight {
+                font-size: clamp(1.5rem, 6vw, 6rem); /* Smaller font on mobile */
+            }
+            
+            .scramble-text .final-text {
+                font-size: clamp(0.8rem, 3vw, 2rem);
+            }
+
+            .audio-prompt {
+                top: 70px; /* Slightly lower on mobile */
+                right: 15px;
+                font-size: 12px;
+                padding: 8px 12px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .text-container {
+                padding-top: 16vh; /* Increased from 5vh to 16vh for small screens */
+            }
+
+            .audio-prompt {
+                top: 65px;
+                right: 10px;
+                font-size: 11px;
+                padding: 6px 10px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="fixed-top bg-light">
+        {% include "header.html" %}
+    </header>
+    <canvas id="rainCanvas"></canvas>
+    <audio id="bg-audio" src="{% static 'audio/socialGPT.mp3' %}" loop autoplay preload="auto"></audio>
+    <div class="audio-prompt" id="audioPrompt">🎵 Click to start audio</div>
+    <div class="text-container">
+        <h1 class="scramble-text"></h1>
+    </div>
+
+    <script>
+        // ... existing code ...
+        const canvas = document.getElementById('rainCanvas');
+        const ctx = canvas.getContext('2d');
+        const scrambleTextElement = document.querySelector('.scramble-text');
+        const bgAudio = document.getElementById('bg-audio');
+        const audioPrompt = document.getElementById('audioPrompt');
+
+        // Audio autoplay functionality with multiple attempts
+        function startAudio() {
+            // Try multiple autoplay strategies
+            const tryAutoplay = async () => {
+                try {
+                    // Set volume to 0 initially to avoid sudden loud audio
+                    bgAudio.volume = 0.3;
+                    
+                    // Try to play immediately
+                    await bgAudio.play();
+                    console.log('Audio started successfully!');
+                    
+                    // Hide the audio prompt if it was shown
+                    audioPrompt.classList.remove('show');
+                    
+                    // Gradually increase volume
+                    let volume = 0.3;
+                    const volumeInterval = setInterval(() => {
+                        if (volume < 1.0) {
+                            volume += 0.1;
+                            bgAudio.volume = Math.min(volume, 1.0);
+                        } else {
+                            clearInterval(volumeInterval);
+                        }
+                    }, 100);
+                    
+                } catch (error) {
+                    console.log('Autoplay blocked, setting up interaction fallback:', error);
+                    setupInteractionFallback();
+                }
+            };
+
+            const setupInteractionFallback = () => {
+                // Show the audio prompt immediately
+                audioPrompt.classList.add('show');
+
+                // Try to start audio on ANY user interaction
+                const startAudioOnInteraction = async () => {
+                    try {
+                        await bgAudio.play();
+                        console.log('Audio started on user interaction!');
+                        
+                        // Hide the audio prompt
+                        audioPrompt.classList.remove('show');
+                        
+                        // Remove all event listeners once audio starts
+                        document.removeEventListener('click', startAudioOnInteraction);
+                        document.removeEventListener('keydown', startAudioOnInteraction);
+                        document.removeEventListener('mousemove', startAudioOnInteraction);
+                        document.removeEventListener('touchstart', startAudioOnInteraction);
+                        document.removeEventListener('scroll', startAudioOnInteraction);
+                        
+                        // Gradually increase volume
+                        let volume = 0.3;
+                        const volumeInterval = setInterval(() => {
+                            if (volume < 1.0) {
+                                volume += 0.1;
+                                bgAudio.volume = Math.min(volume, 1.0);
+                            } else {
+                                clearInterval(volumeInterval);
+                            }
+                        }, 100);
+                        
+                    } catch (err) {
+                        console.log('Audio start failed on interaction:', err);
+                    }
+                };
+                
+                // Add multiple event listeners for better coverage
+                document.addEventListener('click', startAudioOnInteraction, { once: true });
+                document.addEventListener('keydown', startAudioOnInteraction, { once: true });
+                document.addEventListener('mousemove', startAudioOnInteraction, { once: true });
+                document.addEventListener('touchstart', startAudioOnInteraction, { once: true });
+                document.addEventListener('scroll', startAudioOnInteraction, { once: true });
+                
+                // Make the audio prompt clickable
+                audioPrompt.addEventListener('click', startAudioOnInteraction, { once: true });
+                
+                // Also try to start audio when the page becomes visible
+                document.addEventListener('visibilitychange', () => {
+                    if (!document.hidden && bgAudio.paused) {
+                        startAudioOnInteraction();
+                    }
+                });
+            };
+            tryAutoplay();
+            setTimeout(tryAutoplay, 100);
+            setTimeout(tryAutoplay, 500);
+            setTimeout(tryAutoplay, 1000);
+        }
+        startAudio();
+
+        let width = canvas.width = window.innerWidth;
+        let height = canvas.height = window.innerHeight;
+
+        const alphabet = 'アァカサタナハマヤャラワガザダバパイィキシチニヒミリヰギジヂビピウゥクスツヌフムユュルグズブプエェケセテネヘメレヱゲゼデベペオォコソトノホモヨョロヲゴゾドボポヴッンABCDEFGHIJKLMNOPQRSTUVWXYZ012345gçüöıqwerxy0123456789*#<>_';
+
+        const fontSize = 16;
+        let columns = Math.floor(width / fontSize);
+        let rainDrops = Array.from({ length: columns }).map(() => 1);
+        
+        let animationTimeouts = [];
+        let letterIntervals = [];
+
+        // --- Digital Rain Logic ---
+        function drawRain() {
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+            ctx.fillRect(0, 0, width, height);
+            ctx.fillStyle = 'rgba(0, 180, 60, 0.7)';
+            ctx.font = `${fontSize}px monospace`;
+            for (let i = 0; i < rainDrops.length; i++) {
+                const text = alphabet.charAt(Math.floor(Math.random() * alphabet.length));
+                ctx.fillText(text, i * fontSize, rainDrops[i] * fontSize);
+                if (rainDrops[i] * fontSize > height && Math.random() > 0.975) rainDrops[i] = 0;
+                rainDrops[i]++;
+            }
+        }
+
+        function animateBackground() {
+            drawRain();
+            requestAnimationFrame(animateBackground);
+        }
+
+        // --- "Random Self-Blink Reveal" Animation Effect ---
+        function applyRandomSelfBlinkReveal(elements, revealDuration = 1000) {
+            const allSpans = [];
+            elements.forEach(el => {
+                const text = el.text;
+                const spans = text.split('').map(char => {
+                    const span = document.createElement('span');
+                    span.textContent = char;
+                    span.style.visibility = 'hidden'; // Start hidden
+                    el.element.appendChild(span);
+                    return span;
+                });
+                allSpans.push(...spans);
+            });
+
+            if (allSpans.length === 0) return;
+
+            const indices = Array.from(Array(allSpans.length).keys());
+            for (let i = indices.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [indices[i], indices[j]] = [indices[j], indices[i]];
+            }
+
+            const revealDelay = revealDuration / allSpans.length;
+
+            indices.forEach((spanIndex, i) => {
+                setTimeout(() => {
+                    const span = allSpans[spanIndex];
+                    
+                    // 1-second blink animation
+                    setTimeout(() => { span.style.visibility = 'visible'; }, 0);
+                    setTimeout(() => { span.style.visibility = 'hidden'; }, 250);
+                    setTimeout(() => { span.style.visibility = 'visible'; }, 500);
+                    setTimeout(() => { span.style.visibility = 'hidden'; }, 750);
+                    setTimeout(() => { span.style.visibility = 'visible'; }, 1000);
+
+                }, i * revealDelay);
+            });
+        }
+
+        // --- Animation Runners ---
+        function runAnimation(parts, duration, fadeOut = true) {
+            return new Promise(resolve => {
+                letterIntervals.forEach(clearInterval);
+                letterIntervals = [];
+
+                let content = '';
+                let mainContent = '';
+                if (parts.main) mainContent += `<div class="main"></div>`;
+                if (parts.highlight) mainContent += `<div class="highlight"></div>`;
+                if (mainContent) content += `<div class="main-text-group">${mainContent}</div>`;
+                
+                // Handle both subtitle and highlighted subtitle
+                if (parts.subtitle) content += `<div class="subtitle"></div>`;
+                if (parts.subtitle_highlight) content += `<div class="subtitle-highlight"></div>`;
+
+                if (parts.release) {
+                    parts.release.forEach(part => {
+                        content += `<div class="${part.class}">${part.text}</div>`;
+                    });
+                }
+                scrambleTextElement.innerHTML = content;
+
+                const elementsToAnimate = [];
+                const mainEl = scrambleTextElement.querySelector('.main');
+                const highlightEl = scrambleTextElement.querySelector('.highlight');
+                const subtitleEl = scrambleTextElement.querySelector('.subtitle');
+                const subtitleHighlightEl = scrambleTextElement.querySelector('.subtitle-highlight');
+
+                if (mainEl && parts.main) elementsToAnimate.push({ element: mainEl, text: parts.main });
+                if (highlightEl && parts.highlight) elementsToAnimate.push({ element: highlightEl, text: parts.highlight });
+                if (subtitleEl && parts.subtitle) elementsToAnimate.push({ element: subtitleEl, text: parts.subtitle });
+                if (subtitleHighlightEl && parts.subtitle_highlight) elementsToAnimate.push({ element: subtitleHighlightEl, text: parts.subtitle_highlight });
+
+                if (parts.release) {
+                    const releaseEls = scrambleTextElement.querySelectorAll('div');
+                    parts.release.forEach((part, index) => {
+                        // This part is now instant, so no animation needed
+                    });
+                }
+
+                scrambleTextElement.classList.add('visible');
+                applyRandomSelfBlinkReveal(elementsToAnimate, 1000);
+
+                if (fadeOut) {
+                    const fadeOutTimeout = setTimeout(() => {
+                        scrambleTextElement.classList.remove('visible');
+                        setTimeout(() => {
+                            scrambleTextElement.innerHTML = '';
+                            resolve();
+                        }, 500);
+                    }, duration);
+                    animationTimeouts.push(fadeOutTimeout);
+                }
+            });
+        }
+
+        // --- Main Sequence Controller ---
+        async function startSequence() {
+            animationTimeouts.forEach(clearTimeout);
+            animationTimeouts = [];
+            letterIntervals.forEach(clearInterval);
+            letterIntervals = [];
+
+            // Changed subtitle to subtitle_highlight
+            const parts1 = { main: "AIHUB-VVITU", subtitle_highlight: "presents" };
+            const parts2 = { main: "Social", highlight: "GPT" };
+            // Updated classes for final text
+            const parts3 = {
+                release: [
+                    { text: "Releasing (Beta version)", class: "final-text" },
+                    { text: "on", class: "final-text" },
+                    { text: "5 November, 2025", class: "final-text highlight" }
+                ]
+            };
+
+            let loopCount = 0;
+            
+            // Infinite loop function
+            const runInfiniteLoop = async () => {
+                try {
+                    loopCount++;
+                    console.log(`Starting animation loop #${loopCount}`);
+                    
+                    scrambleTextElement.classList.remove('visible');
+                    scrambleTextElement.innerHTML = '';
+                    
+                    await new Promise(resolve => setTimeout(resolve, 2000));
+                    
+                    console.log('Running animation 1: AIHUB-VVITU');
+                    await runAnimation(parts1, 4000);
+                    await new Promise(resolve => setTimeout(resolve, 500));
+                    
+                    console.log('Running animation 2: Social GPT');
+                    await runAnimation(parts2, 5000);
+                    await new Promise(resolve => setTimeout(resolve, 500));
+                    
+                    console.log('Running animation 3: Final text');
+                    await runAnimation(parts3, 5000, true); // Changed to true to ensure fadeOut
+                    
+                    console.log('Animation loop completed, waiting before next iteration...');
+                    // Wait a bit before starting the loop again
+                    await new Promise(resolve => setTimeout(resolve, 2000));
+                    
+                    console.log('Starting next loop iteration...');
+                    // Recursively call itself to create infinite loop
+                    runInfiniteLoop();
+                } catch (error) {
+                    console.error('Error in animation loop:', error);
+                    // If there's an error, try to restart the loop
+                    console.log('Restarting loop due to error...');
+                    setTimeout(runInfiniteLoop, 800);
+                }
+            };
+
+            // Start the infinite loop
+            console.log('Starting infinite animation loop...');
+            runInfiniteLoop();
+        }
+
+        // --- Event Listeners and Initial Kick-off ---
+        window.addEventListener('resize', () => {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+            columns = Math.floor(width / fontSize);
+            rainDrops = Array.from({ length: columns }).map(() => 1);
+        });
+
+        animateBackground();
+        startSequence();
+    </script>
+     {% include 'footer.html' %}
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+</body>
+</html>

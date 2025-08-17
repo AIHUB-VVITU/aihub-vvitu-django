@@ -23,5 +23,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('apps.ai_hub.urls')),
     re_path(r'courses/calculus-using-matlab/?', include('apps.courses.matlab.urls')),
-    re_path(r'projects/games/', include('apps.games.urls'))
+    re_path(r'projects/games/', include('apps.games.urls')),
+    re_path(r'projects/ml/', include('apps.ml.urls'))
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

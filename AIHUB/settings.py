@@ -32,12 +32,12 @@ ALLOWED_HOSTS = [
     'localhost',
     '127.0.0.1'
 ]
-
-CSRF_ALLOWED_ORIGINS = [
-   'aihub-vvitu.social',
-    'www.aihub-vvitu.social',
-    'localhost',
-    '127.0.0.1' 
+CSRF_TRUSTED_ORIGINS = [
+    'https://aihub-vvitu.social',
+    'https://www.aihub-vvitu.social',
+    'http://aihub-vvitu.social',
+    'http://www.aihub-vvitu.social',
+    'http://your-server-ip:9000',  # if accessing via IP and port
 ]
 # Application definition
 
@@ -57,6 +57,7 @@ LOCAL_APPS = [
     'apps.courses.matlab.apps.MatlabConfig', 
     'apps.games.apps.GamesConfig',
 ]
+
 
 INSTALLED_APPS = DJANGO_APPS + MAIN_APP + LOCAL_APPS
 
@@ -137,7 +138,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [os.path.join(BASE_DIR ,'static')]
 STATIC_ROOT = BASE_DIR / 'staticfiles'
@@ -148,3 +149,10 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+
+from decouple import config
+
+CLOUDFLARE_API_TOKEN = config("CLOUDFLARE_API_TOKEN")
+CLOUDFLARE_ACCOUNT_ID = config("CLOUDFLARE_ACCOUNT_ID")
+CLOUDFLARE_ZONE_ID = config("CLOUDFLARE_ZONE_ID")
+CLOUDFLARE_API_BASE = "https://api.cloudflare.com/client/v4"

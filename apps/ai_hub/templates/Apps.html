@@ -3,13 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI-HUB-Projects</title>
+    <title>AI-HUB-Apps</title>
+    <link rel="icon" href="{% static 'images/ai.png' %}" type="image/png">
     {% include 'partials/links.html' %}
     <link rel="stylesheet" href="{% static 'css/apps.css' %}">
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-ESPNK2NQ0R"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-ESPNK2NQ0R');
+    </script>
 </head>
 <body>
-    {% include "header.html" %}
-    <br><br>
+    <header class="fixed-top bg-light">
+        {% include "header.html" %}
+    </header>
     <h1 id="page-title">Apps</h1>
     <div id="cards">
       {% for app in apps %}

@@ -12,7 +12,10 @@ urlpatterns = [
     path('career/job-guide', views.job_guide, name='job_guide'),
     path('courses', views.courses, name='courses'),
     path('projects/games', views.games, name='games'),
+    path('projects/ml', views.ml, name='ml'),
     path('events/meetups', views.meetups, name='meetups'),
     re_path(r'blog_viewer/media/blogs/(?P<pk>.+)', views.blog_viewer, name='blog_viewers'),
-    path('career/<str:pk>', views.career_choice, name='career_choice')
+    path('career/<str:pk>', views.career_choice, name='career_choice'),
+    path('socialGPT/about', views.socialGPT, name='socialGPT'),
+    path("api/visitors/", views.get_visitors, name="get_visitors"),
 ]

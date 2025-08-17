@@ -5,14 +5,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="{% static 'images/ai.png' %}" type="image/png">
     <title>AI-HUB-Home</title>
     <!-- Load script before using custom elements -->
     {% include 'partials/links.html' %}
     <link rel="stylesheet" href="{% static 'css/home.css' %}">
+        <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-ESPNK2NQ0R"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-ESPNK2NQ0R');
+    </script>
 </head>
 
-<body>
-    {% include 'header.html' %}
+<body style="padding:0px">
+    <header class="fixed-top bg-light">
+        {% include "header.html" %}
+    </header>
     <main>
         <div class="welcome-text">
             <h5>Welcome all</h5>

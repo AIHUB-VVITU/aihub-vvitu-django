@@ -3,11 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="{% static 'images/ai.png' %}" type="image/png">
     {% include 'partials/links.html' %}
     <link rel="stylesheet" href="{% static 'css/project.css' %}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css"/>
-    <title>AI-HUB-About</title>
+    <title>AI-HUB-Projects</title>
+        <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-ESPNK2NQ0R"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-ESPNK2NQ0R');
+    </script>
     <style>
       #cards > .card {
         margin-bottom : 1rem;
@@ -15,8 +24,9 @@
     </style>
 </head>
 <body>
-    {% include 'header.html' %}
-    <br><br>
+    <header class="fixed-top bg-light">
+        {% include "header.html" %}
+    </header>
     <h1 id="page-title">Ongoing Projects</h1>
     <hr><br><center>'&nbsp;Coming Soon&nbsp;'</center><br><br>
     <h1 id="page-title">Completed Projects</h1>
@@ -29,13 +39,9 @@
         </div>
          <div class="card" id='ml'>
             <div id="card-image">
+              <a href="projects/ml">
               <img src="{% static 'images/ml1.png' %}" alt="...">
             </div>  
-        </div>
-        <div class="card" id='dl'>
-          <div id="card-image">
-            <img src="{% static 'images/dl1.png' %}" alt="...">
-          </div>  
         </div>
         {% include 'footer.html' %}
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>

@@ -3,15 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="{% static 'images/ai.png' %}" type="image/png">
     {% include 'partials/links.html' %}
     <link rel="stylesheet" href="{% static 'css/blog.css' %}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css"/>
     <title>AI-HUB-Blogs</title>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-ESPNK2NQ0R"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-ESPNK2NQ0R');
+    </script>
+    <style>
+        @media(max-width: 720px) {
+          .collapsed-navbar {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+          }
+        }
+    </style>
 </head>
 <body>
-    {% include 'header.html'%}
-    <br><br>
+        <header class="fixed-top bg-light" style="padding:0px;">
+            {% include "header.html" %}
+        </header>
+        <br>
         <!-- Main content -->
         <h1 id="page-title">BLOGS</h1><hr>
         {% if blogs %}

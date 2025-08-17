@@ -4,14 +4,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="{% static 'images/ai.png' %}" type="image/png">
     {% include 'partials/links.html' %}
     <title>AI-HUB-Career</title>
     <link rel="stylesheet" href="{% static 'css/career.css' %}">
     <link rel="stylesheet" href="{% static 'css/blog.css' %}">
+        <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-ESPNK2NQ0R"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-ESPNK2NQ0R');
+    </script>
+    <style>
+        @media(max-width: 720px) {
+          .collapsed-navbar {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+          }
+        }
+    </style>
 </head>
-<body>
-    {% include 'header.html' %}
-    <br><br>
+<body style="padding-top: 60px;">
+    <header class="fixed-top bg-light" style="padding:0px;">
+        {% include "header.html" %}
+    </header>
     <h1 id="page-title">Career Catalyts</h1>
     <h3 id="section_heading">Job Guide</h3>
     <hr>

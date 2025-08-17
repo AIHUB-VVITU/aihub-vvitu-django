@@ -3,18 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="{% static 'images/ai.png' %}" type="image/png">
     {% include 'partials/links.html' %}
     <link rel="stylesheet" href="{% static 'css/blog.css' %}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css"/>
-    <title>AI-HUB-Blogs</title>
+    <title>AI-HUB-JobGuide</title>
+        <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-ESPNK2NQ0R"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-ESPNK2NQ0R');
+    </script>
 </head>
 <body>
-    <div class='mt-3 pt-3'>
-        <a href="/" style="margin-left: 2rem;font-size:16px;">AI-HUB@VVITU</a> &gt 
-        <a href="/career" style="font-size:16px;">Career</a> &gt 
-        <a href="/career/job-guide" style="color:black;font-size:16px;">Job-Guide</a>
-    </div>
+    <header class="fixed-top bg-light">
+        {% include "header.html" %}
+        <div class='mt-0 p-2 border-top' style="font-size: 12px;">
+            <a href="/" style="margin-left: 2rem;font-size:16px;">AI-HUB@VVITU</a> &gt 
+            <a href="/career" style="font-size:16px;">Career</a> &gt 
+            <a href="/career/job-guide" style="color:black;font-size:16px;">Job-Guide</a>
+        </div>
+    </header>
+    
     <h1 id="page-title">Articles</h1><hr>
     <main id="blog-container" class='container'>
         {% for article in articles %}
