@@ -1,0 +1,66 @@
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="{% static 'images/ai.png' %}" type="image/png">
+    <title>AI-HUB-ML</title>
+    {% include 'partials/links.html' %}
+    <link rel="stylesheet" href="{% static 'css/Games.css' %}">
+        <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-ESPNK2NQ0R"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-ESPNK2NQ0R');
+    </script>
+</head>
+<body>
+    <header class="fixed-top bg-light">
+        {% include "header.html" %}
+        <div class='mt-0 p-2 border-top' style="font-size: 12px;">
+          <a href="/" style="margin-left: 2rem;font-size:16px;">AI-HUB@VVITU</a> &gt 
+          <a href="/projects" style="font-size:16px;">Projects</a> &gt 
+          <a href="/projects/ml" style="color:black;font-size:16px;">ML</a>
+        </div>
+    </header>
+    <br> <br>
+    <h1 id="page-title">Machine Learning Projects</h1>
+    <!-- Other Projects -->
+    <h3 id="section_heading">Completed Projects</h3>
+    <hr>
+    <div id="cards">
+      {% for project in ml_projects %}
+      <div class="project-card">
+          <div id="card-image">
+          <img src="{{project.img.url}}" alt="Project_image" class="card-img">
+        </div>
+        <div class="card-body">
+          <div id="desc">
+            <h5 class="card-title"><b>{{project.title}}</b></h5><p style="font-size:0.65rem">Done By:<br>{{project.name}} <br>{{project.s_id}}</p>
+            <h6 class="card-subtitle mb-2 text-body-secondary"><b>Description</b></h6>
+            <div id="text-scroll">
+              <p class="card-text">{{project.desc}}</p>
+            </div>
+          </div>
+          <div id="buttons">
+            {% if project.git_link %}
+              <a href="{{project.git_link}}" class="btn btn-primary"><i class="fa-brands fa-github"></i>&nbsp;Code</a>
+            {% endif %}
+            {% if project.desc %}
+              <a href="{{project.desc}}" class="btn btn-primary"><i class="fa-solid fa-book"></i>&nbsp;Report</a>
+            {% endif %}
+            {% comment %} <a href="#" class="btn btn-primary"><i class="fa-solid fa-file-powerpoint"></i>&nbsp;PPT</a> {% endcomment %}
+            {% if project.play_url %}
+              <a href="ml/{{project.play_url}}" class="btn btn-primary">▷&nbsp;&nbsp;Visit</a>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% include 'footer.html' %}
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+</body>
+</html>

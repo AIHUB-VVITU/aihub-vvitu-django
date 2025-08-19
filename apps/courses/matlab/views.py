@@ -4,7 +4,7 @@ import markdown2
 from .models import *
 
 def landing(request):
-    return render(request, 'courses/matlab/matlab.html')
+    return render(request, 'matlab.html')
 
 def index(request):
     try:
@@ -14,7 +14,7 @@ def index(request):
             'experiments': experiments,
             'materials': materials
         }
-        return render(request, template_name="courses/matlab/home.html", context=context)
+        return render(request, template_name="home.html", context=context)
     except Exception as e:
         return redirect('/')
 
@@ -27,7 +27,7 @@ def exp_detail(request):
         markdown_content = exp_blog.blog_file.read().decode('utf-8')
         html_content = markdown2.markdown(markdown_content, extras=["tables", "fenced-code-blocks"])
         context = {'exp': exp_blog, 'blog_content_html': html_content}
-        return render(request, 'courses/matlab/experiment_desc.html', context=context)
+        return render(request, 'experiment_desc.html', context=context)
     except MatlabExperiment.DoesNotExist:
         return redirect('/courses/calculus-using-matlab/')
     except Exception as e: 
@@ -48,4 +48,4 @@ def exp_view(request):
         "slide_count" : slide_count,
         "exp": exp_implementation
     }
-    return render(request,template_name='courses/matlab/experiment_viewer.html', context=context)
+    return render(request,template_name='experiment_viewer.html', context=context)

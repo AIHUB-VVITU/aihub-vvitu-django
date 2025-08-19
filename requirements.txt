@@ -3,3 +3,4 @@ gunicorn
 pathlib
 pillow
 markdown2
+pygbag

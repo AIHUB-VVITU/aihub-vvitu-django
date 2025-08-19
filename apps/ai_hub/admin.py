@@ -5,6 +5,7 @@ from . import models
 admin.site.register(models.Team)
 admin.site.register(models.Apps)
 admin.site.register(models.Game)
+admin.site.register(models.Ml)
 admin.site.register(models.Event)
 admin.site.register(models.Blog)
 admin.site.register(models.CareerChoice)
