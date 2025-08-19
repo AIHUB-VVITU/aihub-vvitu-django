@@ -149,10 +149,3 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
-
-from decouple import config
-
-CLOUDFLARE_API_TOKEN = config("CLOUDFLARE_API_TOKEN")
-CLOUDFLARE_ACCOUNT_ID = config("CLOUDFLARE_ACCOUNT_ID")
-CLOUDFLARE_ZONE_ID = config("CLOUDFLARE_ZONE_ID")
-CLOUDFLARE_API_BASE = "https://api.cloudflare.com/client/v4"

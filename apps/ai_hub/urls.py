@@ -17,5 +17,4 @@ urlpatterns = [
     re_path(r'blog_viewer/media/blogs/(?P<pk>.+)', views.blog_viewer, name='blog_viewers'),
     path('career/<str:pk>', views.career_choice, name='career_choice'),
     path('socialGPT/about', views.socialGPT, name='socialGPT'),
-    path("api/visitors/", views.get_visitors, name="get_visitors"),
 ]

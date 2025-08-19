@@ -1,8 +1,10 @@
 import requests
+import os
 from django.http import JsonResponse
 from django.shortcuts import render
 from django.conf import settings
 from .models import *
+from datetime import datetime, timedelta
 
 # Create your views here.
 def index(request):
@@ -93,20 +95,3 @@ def career_choice( request, pk ):
 
     context = {'pk': pk, 'categories': categories, 'selected_category': selected_category, 'data': section_content}
     return render(request, 'career_content.html', context)
-
-
-def get_visitors(request):
-    url = f"https://api.cloudflare.com/client/v4/zones/{settings.CLOUDFLARE_ZONE_ID}/analytics/dashboard?since=-1d&until=now"
-    headers = {
-        "Authorization": f"Bearer {settings.CLOUDFLARE_API_TOKEN}",
-        "Content-Type": "application/json"
-    }
-    response = requests.get(url, headers=headers)
-    data = response.json()
-
-    try:
-        uniques = data["result"]["totals"]["uniques"]
-    except Exception:
-        uniques = 0
-
-    return JsonResponse({"uniques": uniques})
