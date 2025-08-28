@@ -17,5 +17,10 @@ urlpatterns = [
     re_path(r'blog_viewer/media/blogs/(?P<pk>.+)', views.blog_viewer, name='blog_viewers'),
     path('career/<str:pk>', views.career_choice, name='career_choice'),
     path('socialGPT/about', views.socialGPT, name='socialGPT'),
-    path("api/visitors/", views.get_visitors, name="get_visitors"),
+    path("ask-llama/", views.ask_llama, name="ask_llama"),
+    path("google/login", views.google_login, name="google_login"),
+    path("sign-in-callback", views.sign_in_callback, name="sign_in_callback"),
+    path("sign-out-callback", views.sign_out_callback, name="sign_out_callback"),
+    path('refresh-token/', views.refresh_google_token, name='refresh_google_token'),
+    path('handle-errors/', views.handle_google_errors, name='handle_google_errors'),
 ]

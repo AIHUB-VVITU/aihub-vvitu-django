@@ -22,8 +22,6 @@
             margin: 0;
             overflow: hidden;
             background-color: #000;
-            font-family: 'Orbitron', sans-serif !important;
-            color: white;
         }
 
         /* Canvas for the background digital rain */
@@ -51,7 +49,9 @@
         }
 
         /* The main text element container */
-        .scramble-text {
+        .text-container .scramble-text {
+            font-family: 'Orbitron', sans-serif;
+            color: white;
             position: relative;
             opacity: 0; /* Initially hidden */
             transform: scale(1.1);
@@ -63,14 +63,21 @@
             max-width: 90vw; /* Added max-width for better mobile display */
         }
 
+        /* Force all children of the scramble text to inherit the Orbitron font.
+           This overrides generic tag selectors from common.css (like h1, div, etc.) */
+        .text-container .scramble-text * {
+            font-family: inherit !important; /* Ensures Orbitron is used */
+            font-style: normal !important; /* Overrides any inherited italic styles */
+        }
+
         /* Class to trigger the appearance */
-        .scramble-text.visible {
+        .text-container .scramble-text.visible {
             opacity: 1;
             transform: scale(1);
         }
 
         /* Style for subtitle text below the main text */
-        .scramble-text .subtitle {
+        .text-container .scramble-text .subtitle {
             font-size: clamp(0.75rem, 4vw, 2rem);
             font-weight: 400;
             letter-spacing: 0.05em;
@@ -84,7 +91,7 @@
             justify-content: center;
         }
 
-        .scramble-text .main {
+        .text-container .scramble-text .main {
             font-size: clamp(2rem, 8vw, 8rem);
             font-weight: 900;
             letter-spacing: 0.1em;
@@ -96,7 +103,7 @@
             white-space: nowrap;
         }
 
-        .scramble-text .highlight {
+        .text-container .scramble-text .highlight {
             font-size: clamp(2rem, 8vw, 8rem);
             font-weight: 900;
             letter-spacing: 0.1em;
@@ -107,7 +114,7 @@
         }
 
         /* New style for the highlighted subtitle */
-        .scramble-text .subtitle-highlight {
+        .text-container .scramble-text .subtitle-highlight {
             font-size: clamp(0.75rem, 4vw, 2rem);
             font-weight: 400;
             color: rgb(250, 115, 105);
@@ -117,7 +124,7 @@
         }
 
         /* Consolidated styles for the final slide */
-        .scramble-text .final-text {
+        .text-container .scramble-text .final-text {
             font-size: clamp(1rem, 4vw, 3rem);
             font-weight: 400;
             color: rgb(56, 255, 112);
@@ -127,7 +134,7 @@
             margin: 0.2em 0; /* Added margin for better spacing */
         }
 
-        .scramble-text .final-text.highlight {
+        .text-container .scramble-text .final-text.highlight {
             color: rgb(250, 115, 105);
             text-shadow: 0 0 10px rgba(250, 115, 105, 0.9);
         }
@@ -143,6 +150,8 @@
             border-radius: 5px;
             font-size: 14px;
             font-weight: bold;
+            font-style: normal; /* Ensure the prompt is not italic */
+            font-family: 'Orbitron', sans-serif;
             z-index: 1001; /* Increased z-index to be above header */
             opacity: 0;
             transform: translateX(100%);
@@ -167,12 +176,12 @@
                 padding-top: 18vh; /* Increased from 6vh to 18vh for mobile */
             }
             
-            .scramble-text .main,
-            .scramble-text .highlight {
+            .text-container .scramble-text .main,
+            .text-container .scramble-text .highlight {
                 font-size: clamp(1.5rem, 6vw, 6rem); /* Smaller font on mobile */
             }
             
-            .scramble-text .final-text {
+            .text-container .scramble-text .final-text {
                 font-size: clamp(0.8rem, 3vw, 2rem);
             }
 
@@ -196,6 +205,19 @@
                 padding: 6px 10px;
             }
         }
+
+        main {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        @media (max-width: 700px) {
+            main {
+                margin-top: 40%;
+            }
+        }
+
     </style>
 </head>
 
@@ -206,10 +228,13 @@
     <canvas id="rainCanvas"></canvas>
     <audio id="bg-audio" src="{% static 'audio/socialGPT.mp3' %}" loop autoplay preload="auto"></audio>
     <div class="audio-prompt" id="audioPrompt">🎵 Click to start audio</div>
-    <div class="text-container">
-        <h1 class="scramble-text"></h1>
-    </div>
-
+    
+    <main>
+        <div class="text-container">
+            <div class="scramble-text"></div>
+        </div>
+    </main>
+    
     <script>
         // ... existing code ...
         const canvas = document.getElementById('rainCanvas');
@@ -313,7 +338,7 @@
         let width = canvas.width = window.innerWidth;
         let height = canvas.height = window.innerHeight;
 
-        const alphabet = 'アァカサタナハマヤャラワガザダバパイィキシチニヒミリヰギジヂビピウゥクスツヌフムユュルグズブプエェケセテネヘメレヱゲゼデベペオォコソトノホモヨョロヲゴゾドボポヴッンABCDEFGHIJKLMNOPQRSTUVWXYZ012345gçüöıqwerxy0123456789*#<>_';
+        const alphabet = '01';
 
         const fontSize = 16;
         let columns = Math.floor(width / fontSize);

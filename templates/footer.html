@@ -8,14 +8,7 @@
 
 <nav class="navbar navbar-expand-lg fixed-bottom bg-body-tertiary">
     <div class="container-fluid d-flex justify-content-between align-items-center" id="footer">
-
-        <!-- LEFT: Unique Visitors -->
-        <div id="visitor-count-box">
-            👥 Visitors: <span id="visitor-count">Loading...</span>
-        </div>
-
-        <!-- CENTER: Links -->
-        <ul style="list-style: none; display: flex; justify-content: center;">
+    <ul style="list-style: none; display: flex; justify-content: center;">
             <div><li class="desc_item"><i class="fa-solid fa-building-columns"></i><a href="https://www.vvitguntur.com/">VVIT</a></li></div>
             <div><li class="desc_item"><i class="fa-solid fa-location-dot"></i><a href="https://www.google.com/maps/place/Vasireddy+Venkatadri+Institute+of+Technology/data=!4m2!3m1!1s0x0:0x8c86e4f36490336b?sa=X&ved=1t:2428&ictx=111">Guntur</a></li></div>
             <div><li class="desc_item"><i class="fas fa-envelope"></i><a href="mailto:">Mail</a></li></div>
@@ -61,14 +54,6 @@
         -webkit-backdrop-filter: blur(5px);
     }
 
-    /* New Visitor Count Styling */
-    #visitor-count-box {
-        font-size: 0.9rem;
-        font-weight: 500;
-        color: #fff; /* adjust if footer bg is light */
-        margin-left: 10px;
-    }
-    
     .bg-circle-container {
         position: fixed;
         bottom: 0;
@@ -147,10 +132,6 @@
         #footer {
             padding: 8px 0;
         }
-
-        #visitor-count-box {
-            font-size: 0.7rem;
-        }
         
         @supports not (backdrop-filter: blur(5px)) {
             #footer {
@@ -210,19 +191,4 @@
             });
         }, 300);
     });
-
-    // Fetch visitors from Django API
-    async function fetchVisitorCount() {
-        try {
-            const response = await fetch("{% url 'get_visitors' %}");
-            const data = await response.json();
-            document.getElementById("visitor-count").innerText = data.uniques;
-        } catch (err) {
-            console.error("Error fetching visitor count:", err);
-            document.getElementById("visitor-count").innerText = "N/A";
-        }
-    }
-
-    document.addEventListener("DOMContentLoaded", fetchVisitorCount);
-    setInterval(fetchVisitorCount, 120000); // update every 2 min
 </script>

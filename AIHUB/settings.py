@@ -150,9 +150,11 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
-from decouple import config
+GOOGLE_REDIRECT_SIGNIN = "http://localhost:9002/sign-in-callback"
+GOOGLE_REDIRECT_SIGNOUT = "http://localhost:9002/sign-out-callback"
 
-CLOUDFLARE_API_TOKEN = config("CLOUDFLARE_API_TOKEN")
-CLOUDFLARE_ACCOUNT_ID = config("CLOUDFLARE_ACCOUNT_ID")
-CLOUDFLARE_ZONE_ID = config("CLOUDFLARE_ZONE_ID")
-CLOUDFLARE_API_BASE = "https://api.cloudflare.com/client/v4"
+GOOGLE_SCOPES = [
+    "openid",
+    "https://www.googleapis.com/auth/userinfo.profile",
+    "https://www.googleapis.com/auth/userinfo.email",
+]
