@@ -9,6 +9,10 @@ from google_auth_oauthlib.flow import Flow
 from google.auth.transport.requests import AuthorizedSession, Request
 from google.oauth2.credentials import Credentials
 from google.auth.exceptions import RefreshError
+from django.utils.deprecation import MiddlewareMixin
+from typing import Optional
+from django.contrib.auth.decorators import login_required
+import markdown2
 
 # Create your views here.
 def index(request):
@@ -103,41 +107,27 @@ def career_choice( request, pk ):
 def ask_llama(request):
     response = None
     if request.method == "POST":
+        # Get the question and model from the request
         question = request.POST.get("question")
+        model = request.POST.get("model", "llama3.3:70b")  # Default to llama3.3:70b if no model is provided
+
         if question:
             try:
-                llama_api_url = "http://localhost:11434/api/chat"
-                payload = {
-                    "model": "llama3.3:70b",   # change to your model
-                    "messages": [
-                        {"role": "user", "content": question}
-                    ],
-                    "stream": False           # important: disables streaming
-                }
-                api_response = requests.post(llama_api_url, json=payload)
-
-                if api_response.status_code == 200:
-                    data = api_response.json()
-                    # Extract content safely
-                    if "message" in data and "content" in data["message"]:
-                        response = data["message"]["content"]
-                    else:
-                        response = "No response from Llama"
-                else:
-                    response = f"Error: {api_response.status_code} - {api_response.text}"
-
+                # Use OllamaHttpClient to interact with the API
+                response = client.get_response(prompt=question, model_name=model)
+                response = markdown2.markdown(response)
             except Exception as e:
                 response = f"Error: {str(e)}"
-
-    return render(request, "llm_query.html", {"response": response})
+            return render(request, "llm_query.html", {"response": response })
+        return render(request, "llm_query.html", {"response": "no question specified" })
 
 CLIENT_SECRETS_FILE = os.path.join(os.path.dirname(__file__), "client_secret.json")
 
 def google_login(request):
     flow = Flow.from_client_secrets_file(
-        CLIENT_SECRETS_FILE,
-        scopes=settings.GOOGLE_SCOPES,
-        redirect_uri=settings.GOOGLE_REDIRECT_SIGNIN,
+        '/home/aihub-vvitu/aihub-vvitu/apps/ai_hub/client_secret.json',
+        scopes=['https://www.googleapis.com/auth/userinfo.profile', 'https://www.googleapis.com/auth/userinfo.email'],
+        redirect_uri='http://aihub-vvitu.social/sign-in-callback'
     )
     authorization_url, state = flow.authorization_url(
         access_type="offline",
@@ -218,3 +208,63 @@ def handle_google_errors(request):
         return HttpResponse(f"Error: {str(ve)}")
     except Exception as e:
         return HttpResponse(f"An unexpected error occurred: {str(e)}")
+
+class GoogleAuthMiddleware(MiddlewareMixin):
+    def process_request(self, request):
+        allowed_paths = [
+            '/google/login',
+            '/sign-in-callback',
+            '/sign-out-callback',
+            '/refresh-token/',
+            '/handle-errors/',
+            '/static/',
+            '/admin/',
+        ]
+        if any(request.path.startswith(path) for path in allowed_paths):
+            return None
+        if not request.session.get('google_creds'):
+            return redirect('/google/login')
+        return None
+
+class OllamaHttpClient:
+    """
+    Retrieves a specific response from the local ollama 
+    To be sent back to external client
+    """
+    def __init__(self, config):
+        # initialize config
+        self.config = config
+
+    @staticmethod
+    def get_response(prompt: str, model_name: Optional[str] = 'llama3.3:70b') -> str:
+        # Example implementation for sending a request to the API
+        url = f"http://localhost:11434/api/chat"
+        payload = {
+            "model": model_name, 
+            "stream":False,
+            "messages": [{"role": "user", "content": prompt}]
+        }
+        response = requests.post(url, json=payload)
+        text = response.json()['message']['content']
+        return text if response.status_code == 200 else "Error: Unable to fetch response"
+
+    @staticmethod
+    def get_model_info(model_name: str) -> str:
+        url = f"http://localhost:11434/api/info"
+        response = requests.get(url)
+        return response.text if response.status_code == 200 else "Error: Unable to fetch model info"
+
+    def get_all_models(self) -> str:
+        url = "http://localhost:11434/api/models"
+        response = requests.get(url)
+        return response.text if response.status_code == 200 else "Error: Unable to fetch models"
+
+# Instantiate the client
+client = OllamaHttpClient(config={}) # Pass in the appropriate config
+
+def view(request):
+    # Process the request payload
+    prompt = request.GET.get("prompt", "")
+    # Use the client to interact with the API
+    response = client.get_response(prompt)
+    return HttpResponse(response)

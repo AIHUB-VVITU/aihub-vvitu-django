@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-75lcu$b3-yghs9rh#%&r2s9a4-eorjgd-(a@y!2b#1xt_y-&i8'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = [
     'aihub-vvitu.social',

@@ -22,7 +22,7 @@
             border-radius: 8px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
-        input[type="text"] {
+        input[type="text"], select {
             width: 80%;
             padding: 10px;
             margin: 10px 0;
@@ -46,6 +46,16 @@
             background: #e9ecef;
             border-radius: 4px;
         }
+        #loading {
+            display: none;
+            margin-top: 20px;
+            font-size: 16px;
+            color: #007BFF;
+        }
+        #model-info {
+            margin-top: 20px;
+            text-align: left;
+        }
     </style>
 </head>
 <body>
@@ -55,14 +65,36 @@
             {% csrf_token %}
             <input type="text" name="question" placeholder="Type your question here..." required>
             <br>
+            <select name="model">
+                <option value="dolphin-mixtral:8x22b">Dolphin Mixtral: 8x22B</option>
+                <option value="mistral:7b">Mistral: 7B</option>
+                <option value="llama3.3:70b">Llama 3.3: 70B</option>
+            </select>
+            <br>
             <button type="submit">Ask</button>
         </form>
+
+        <div id="loading">Loading...</div>
+
         {% if response %}
         <div class="response">
             <h3>Response:</h3>
-            <p>{{ response }}</p>
+            <p>{{ response|safe }}</p>
         </div>
         {% endif %}
     </div>
+
+    <script>
+        const modelInfo = {
+            "dolphin-mixtral:8x22b": "Size: 79 GB, Modified: 43 hours ago",
+            "mistral:7b": "Size: 4.4 GB, Modified: 43 hours ago",
+            "llama3.3:70b": "Size: 42 GB, Modified: 4 weeks ago"
+        };
+
+        const form = document.querySelector('form');
+        form.addEventListener('submit', function() {
+            document.getElementById('loading').style.display = 'block';
+        });
+    </script>
 </body>
 </html>
