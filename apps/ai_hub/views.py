@@ -105,21 +105,41 @@ def career_choice( request, pk ):
     return render(request, 'career_content.html', context)
 
 def ask_llama(request):
+
+    if request.method=='GET':
+        request.session['chat'] = []
+    models = ['gpt-oss:20b', 'dolphin-mixtral:8x22b', 'mistral:7b', 'llama3.3:70b']
+
     response = None
     if request.method == "POST":
-        # Get the question and model from the request
         question = request.POST.get("question")
-        model = request.POST.get("model", "llama3.3:70b")  # Default to llama3.3:70b if no model is provided
+        model = request.POST.get("model", "llama3.3:70b")  
 
         if question:
             try:
+                main_question = question + "Generate in markdown format(Headings, Subheadings, Bold, Italic, tables, line separators, latex, etc...)"
                 # Use OllamaHttpClient to interact with the API
-                response = client.get_response(prompt=question, model_name=model)
-                response = markdown2.markdown(response)
+                response = client.get_response(prompt=main_question, model_name=model)
+                # response = markdown2.markdown(response, html4tags=True)
+
+                models = [model] + [_model for _model in models if _model != model]
+
+                request.session['chat'].append({
+                    'question': question,
+                    'response': response
+                })
+
+                request.session.modified = True
+
+                chat = request.session['chat']
+
             except Exception as e:
                 response = f"Error: {str(e)}"
-            return render(request, "llm_query.html", {"response": response })
-        return render(request, "llm_query.html", {"response": "no question specified" })
+                return render(request, "llm_query.html", {"response": response, 'models': models})
+
+            return render(request, "llm_query.html", {"chat": chat , "models": models})
+        
+    return render(request, "llm_query.html", {"models": models})
 
 CLIENT_SECRETS_FILE = os.path.join(os.path.dirname(__file__), "client_secret.json")
 

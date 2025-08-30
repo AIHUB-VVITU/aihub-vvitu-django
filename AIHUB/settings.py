@@ -150,6 +150,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+
 GOOGLE_REDIRECT_SIGNIN = "http://localhost:9002/sign-in-callback"
 GOOGLE_REDIRECT_SIGNOUT = "http://localhost:9002/sign-out-callback"
 
