@@ -1,16 +1,19 @@
 import requests
 import datetime
+from dotenv import load_dotenv
+import os
 
-# === CONFIG ===
-API_TOKEN = "bJqIsL-M1xqbsiX6sO659e4s7A6Ef-wA09FvLVbv"
-ZONE_TAG = "8f1267309af6f1feaf406e284dcf72aa"
-API_URL = "https://api.cloudflare.com/client/v4/graphql"
+load_dotenv()
+
+# Access variables
+API_TOKEN = os.getenv("API_TOKEN")
+ZONE_TAG = os.getenv("ZONE_TAG")
+API_URL = os.getenv("API_URL")
 
 def get_total_unique_visitors():
     start_date = "2025-08-05"
-    end_date = datetime.date.today().strftime("%Y-%m-%d")  # today
+    end_date = datetime.date.today().strftime("%Y-%m-%d") 
 
-    # === GraphQL QUERY ===
     query = """
     {
       viewer {
