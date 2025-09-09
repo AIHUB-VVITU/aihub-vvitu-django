@@ -4,3 +4,4 @@ pathlib
 pillow
 markdown2
 pygbag
+latex2mathml

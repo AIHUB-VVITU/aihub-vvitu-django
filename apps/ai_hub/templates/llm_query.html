@@ -12,7 +12,6 @@
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
-
     <style>
         /* 1. CSS Variables for Modular Theming */
         :root {
@@ -337,13 +336,10 @@
             {% elif chat %}
                 {% for item in chat %}
                     <div class="user-msg"><strong>You:</strong> {{ item.question }}</div>
-                    <div class="bot-msg"><strong>AI:</strong> {{ item.response }}</div>
+                    <div class="bot-msg"><strong>AI:</strong> {{ item.response|safe }}</div>
                 {% endfor %}
             {% else %}
                 <div class="bot-msg"><strong>AI:</strong> Start chatting with me! I support **Markdown** and can show you code blocks.
-<pre><code class="language-python">def hello_world():
-    print("Hello, World!")
-</code></pre>
                 </div>
             {% endif %}
         </div>

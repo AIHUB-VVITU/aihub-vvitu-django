@@ -120,7 +120,7 @@ def ask_llama(request):
                 main_question = question + "Generate in markdown format(Headings, Subheadings, Bold, Italic, tables, line separators, latex, etc...)"
                 # Use OllamaHttpClient to interact with the API
                 response = client.get_response(prompt=main_question, model_name=model)
-                # response = markdown2.markdown(response, html4tags=True)
+                # response = markdown2.markdown(response, extras=["fenced-code-blocks", "tables", "strike", "cuddled-lists", "metadata", "footnotes", 'latex'])
 
                 models = [model] + [_model for _model in models if _model != model]
 
